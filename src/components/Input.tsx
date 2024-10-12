@@ -1,6 +1,6 @@
 import {TextInput, TextInputProps} from "react-native"
 
-export function Ipunt({...rest}: TextInputProps) {
+export function Input({...rest}: TextInputProps) {
   return (
     <TextInput
       style={{

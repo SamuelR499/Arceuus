@@ -1,5 +1,5 @@
 import { initializeDatabase } from "@/database/initializeDatabase";
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
 
 export default function Layout(){
@@ -8,7 +8,10 @@ export default function Layout(){
             databaseName="myDatabaseSqlite.db"
             onInit={initializeDatabase}
         >
-            <Slot />
+            <Stack>
+                <Stack.Screen name="index" options={{title: "Home"}}/>
+                <Stack.Screen name="details/[id]" options={{title: "Detalhes"}}/>
+            </Stack>
         </SQLiteProvider>
     )
 }
