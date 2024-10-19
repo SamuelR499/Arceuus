@@ -12,6 +12,8 @@ export default function Layout(){
                 <Stack.Screen name="index" options={{title: "Home"}}/>
                 <Stack.Screen name="receitas/index" options={{title: "Receitas"}}/>
                 <Stack.Screen name="receitas/create/index" options={{title: "Cadatrar Receita"}}/>
+                <Stack.Screen name="categorias/index" options={{title: "Categorias"}}/>
+                <Stack.Screen name="categorias/create/index" options={{title: "Cadatrar Categoria"}}/>
             </Stack>
         </SQLiteProvider>
     )

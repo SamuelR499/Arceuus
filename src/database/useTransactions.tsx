@@ -1,28 +1,23 @@
 import { useSQLiteContext } from "expo-sqlite";
 
 // Interface for Transacoes table
-export type Transacao = {
+export type Transaction = {
   id: number;
   data: string; // Assuming date is stored as a string
   descricao: string;
   id_categoria: number;
-  tipo: string;
+  tipo: 'R' | 'D';
   valor: number;
   feito: boolean;
 };
 
 // Interface for Categorias table (optional)
-export type Categoria = {
-  id: number;
-  categoria: string;
-  tipo: string; // Optional, depending on your needs
-};
 
 export function useTransacoesDatabase() {
   const database = useSQLiteContext();
 
   // Create function (adjusted for Transacoes table)
-  async function createTransacao(data: Omit<Transacao, "id">) {
+  async function createTransacao(data: Omit<Transaction, "id">) {
     const statement = await database.prepareAsync(
       "INSERT INTO transacoes (data, descricao, id_categoria, tipo, valor, feito) VALUES ($data, $descricao, $id_categoria, $tipo, $valor, $feito)"
     );
@@ -46,7 +41,7 @@ export function useTransacoesDatabase() {
   }
 
   // Search function (adjusted for Transacoes table)
-  async function searchTransacoes(filter?: Partial<Transacao>) {
+  async function searchTransacoes(filter?: Partial<Transaction>) {
     let query = "SELECT * FROM transacoes";
     let params: any = [];
 
@@ -60,7 +55,7 @@ export function useTransacoesDatabase() {
     }
 
     try {
-      const response = await database.getAllAsync<Transacao>(query, params);
+      const response = await database.getAllAsync<Transaction>(query, params);
       return response;
     } catch (error) {
       throw error;
@@ -68,7 +63,7 @@ export function useTransacoesDatabase() {
   }
 
   // Update function (adjusted for Transacoes table)
-  async function updateTransacao(data: Transacao) {
+  async function updateTransacao(data: Transaction) {
     const statement = await database.prepareAsync(
       "UPDATE transacoes SET data = $data, descricao = $descricao, id_categoria = $id_categoria, tipo = $tipo, valor = $valor, feito = $feito WHERE id = $id"
     );
@@ -104,7 +99,7 @@ export function useTransacoesDatabase() {
     try {
       const query = "SELECT * FROM transacoes WHERE id = ?";
 
-      const response = await database.getFirstAsync<Transacao>(query, [id]);
+      const response = await database.getFirstAsync<Transaction>(query, [id]);
 
       return response;
     } catch (error) {

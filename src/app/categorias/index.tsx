@@ -1,17 +1,12 @@
-import { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, TextInput, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router';
 
-export default function Receitas() {
+export default function Categorias() {
  return (
    <View style={styles.container}>
-    <TextInput
-      placeholder="Procurar..."
-      style={styles.input}
-    />
 
-    <Pressable style={styles.button} onPress={() => router.navigate('/receitas/create')}>
+    <Pressable style={styles.button} onPress={() => router.navigate('/categorias/create')}>
       <Text style={styles.buttonText}>Cadastrar</Text>
       <Ionicons name="add" size={24} color="#FFF" />
     </Pressable>

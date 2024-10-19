@@ -1,32 +1,46 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { router } from 'expo-router';
 
 export default function Create() {
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<Date>(new Date());
   const [mode, setMode] = useState<'date' | 'time' | undefined>('date');
-
   const [descricao, setDescricao] = useState('');
-  const [id_categoria, setIdCategoria] = useState('');
+  const [idCategoria, setIdCategoria] = useState('');
   const [tipo, setTipo] = useState('');
   const [valor, setValor] = useState('');
   const [feito, setFeito] = useState(false);
+  const [dateInput, setDateInput] = useState('')
 
 
-  const onChange = (e: any, selectedDate: Date) =>{
-    setDate(selectedDate);
-    setShowDatePicker(false);
+  const onDatePickerChange = (event: DateTimePickerEvent, selectedDate: Date | undefined) =>{
+    if (selectedDate) {
+      setDate(selectedDate);
+      setShowDatePicker(false);
+      setDateInput(selectedDate.toLocaleDateString())
+    }
   }
 
   const showMode = (modeToShow: 'date' | 'time') => {
     setShowDatePicker(true);
     setMode(modeToShow);
-
   }
 
   const handleCreateRecipe = async () => {
-    console.log('Recipe data:', { descricao, date, id_categoria, tipo, valor, feito });
+    if (!date || !descricao || !idCategoria || !valor) {
+      alert("Preencha todos os campos");
+      return; // Impede a continuação caso haja campos vazios
+    }
+    setTipo('Receita')
+    console.log('Recipe data:', { date, descricao, idCategoria, tipo, valor, typeof: valor, feito });
+    setDate(new Date());
+    setDescricao('');
+    setIdCategoria('');
+    setValor('');
+    setFeito(false);
+    router.navigate("/receitas")
   };
 
   return (
@@ -36,9 +50,10 @@ export default function Create() {
         <TouchableOpacity onPress={()=> showMode("date")}>
           <TextInput
             placeholder='📅 Data da transação'
+            placeholderTextColor="#9ca3af"
             style={styles.input}
             editable={false}
-            value={date.toLocaleDateString()}
+            value={dateInput}
           />
         </TouchableOpacity>
         {showDatePicker && (
@@ -46,23 +61,26 @@ export default function Create() {
             value={date}
             mode={mode}
             is24Hour={true}
-            onChange={onChange}
+            onChange={onDatePickerChange}
           />
         )}
+          <TextInput
+            placeholder='Descrição'
+            placeholderTextColor="#9ca3af"
+            style={styles.input}
+            value={descricao}
+            onChangeText={(text)=> setDescricao(text)}
+          />
         <TextInput
-          placeholder="ID da categoria"
+          placeholder="categoria (Teste, Esse campo deve ser um select)"
+          placeholderTextColor="#9ca3af"
           style={styles.input}
-          value={id_categoria}
-          onChangeText={setIdCategoria}
-        />
-        <TextInput
-          placeholder="Tipo"
-          style={styles.input}
-          value={tipo}
-          onChangeText={setTipo}
+          value={idCategoria}
+          onChangeText={(text)=> setIdCategoria(text)}
         />
         <TextInput
           placeholder="Valor"
+          placeholderTextColor="#9ca3af"
           style={styles.input}
           value={valor}
           onChangeText={setValor}
@@ -96,7 +114,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   text: {
-    color: "#e4e4e7"
+    color: "#d4d4d8"
   },
   containerOption: {
     marginTop: 8,
@@ -108,6 +126,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginTop: 8,
     marginBottom: 8,
+    color: "#374151"
   },
   button: {
     backgroundColor: "#22c55e",
